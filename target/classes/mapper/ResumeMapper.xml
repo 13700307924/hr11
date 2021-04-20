@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.sun.hr.mapper.ResumeMapper">
+    <resultMap id="selectByContion" type="Resume">
+		<id column="resumeId" property="resumeId"></id>
+		<result column="name" property="name"></result>
+        <association property="jobTitle" javaType="Properties">
+            <id column="poId" property="poId"></id>
+            <result column="positionName" property="positionName"></result>
+        </association>
+        <association property="education" javaType="Education">
+			<id column="educationId" property="educationId"></id>
+			<result property="educationName" column="educationName"></result>
+        </association>
+		<association property="recommend" javaType="Interview_state">
+			<id column="interview_stateId" property="interview_stateId"></id>
+			<result property="interview_state_state" column="interview_state_state"></result>
+		</association>
+    </resultMap>
+    <select id="selectAll" resultMap="selectByContion">
+SELECT 	r.resumeId,
+	p.positionName,
+	r.name,
+	r.sex,
+	r.email,
+	r.phone,
+	r.address,
+	r.residence,
+	r.politicsStatus,
+	r.IDCard,
+	r.graduation,
+	e.name educationName,
+	r.specialty,
+	r.workEXP,
+	r.incumbency,
+	r.fresh,
+	r.remuneration,
+	r.recruitmentType,
+	r.registrationTime,
+	r.record,
+	r.accessory,
+	i.state interview_state_state,
+	r.recommend,
+	r.referrer,
+	r.recommendedTime,
+	r.opinion,
+		i.interview_stateId
+	FROM
+	hrdb.resume r
+	LEFT JOIN hrdb.properties p
+	ON r.jobTitle=p.poId
+	LEFT JOIN hrdb.education e
+	ON e.educationId=r.education
+	LEFT JOIN hrdb.interview_state i
+	ON i.interview_stateId=r.recommend
+	<where>
+	<if test="jobTitle != null">
+		<if test="jobTitle.positionName != null and jobTitle.positionName != ''">
+			and p.positionName=#{jobTitle.positionName}
+		</if>
+	</if>
+	<if test="name!= null and name !=''">
+		and r.name like concat('%',#{name},'%')
+	</if>
+	<if test="recommend != null">
+		<if test="recommend.interview_stateId!=null and recommend.interview_stateId!=0">
+			  and r.recommend = #{recommend.interview_stateId}
+		</if>
+	</if>
+	<if test="workEXP !=null and workEXP != ''">
+		and r.workEXP =#{workEXP}
+	</if>
+	<if test="registrationTime != null">
+		and registrationTime <![CDATA[ <= ]]> #{registrationTime}
+	</if>
+	</where>
+	order by r.registrationTime desc
+    </select>
+</mapper>

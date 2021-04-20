@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.sun.hr.mapper.FunctionMapper">
+    <resultMap id="functionMap" type="Functions">
+        <id property="functionId" column="functionId"></id>
+        <result property="name" column="functionName"/>
+        <result column="functionUrl" property="functionUrl"/>
+    </resultMap>
+    <select id="selectFunctions" resultMap="functionMap">
+        SELECT f.* FROM functions f INNER JOIN rolefunctionrelation rf ON f.functionId=rf.functionId
+INNER JOIN role r ON r.roleId=rf.roleId
+WHERE r.roleId=#{roleId} AND f.functionParentId=#{parentFunctionId}
+    </select>
+</mapper>

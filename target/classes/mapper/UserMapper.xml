@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.sun.hr.mapper.UserMapper">
+    <resultMap id="userMap" type="Users">
+        <id property="userName" column="userName"></id>
+        <association property="employee" javaType="Employee">
+            <id property="empId" column="empId"></id>
+            <result property="empName" column="empName"></result>
+        </association>
+        <association property="department" javaType="Department">
+            <id property="deptId" column="deptId"></id>
+            <result property="deptName"  column="deptName"/>
+        </association>
+        <association property="role" javaType="Role">
+            <id column="roleId" property="roleId"></id>
+            <result property="roleName" column="roleName"></result>
+        </association>
+    </resultMap>
+    <select id="select" resultMap="userMap">
+        SELECT * FROM users u
+LEFT JOIN role r ON u.roleId=r.roleId LEFT JOIN employee e ON u.empId=e.empId
+LEFT JOIN department d ON e.deptId=d.deptId
+WHERE u.userName=#{userName} AND userPwd=#{userPwd}
+
+    </select>
+</mapper>

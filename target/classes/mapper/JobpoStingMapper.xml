@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.sun.hr.mapper.JobpoStingMapper">
+    <resultMap id="jobpostringName" type="JobpoString">
+        <association property="department" javaType="Department"></association>
+        <association property="jobTitle" javaType="Properties">
+            <association property="positionId" javaType="Position"></association>
+        </association>
+    </resultMap>
+    <select id="selectAll" resultMap="jobpostringName">
+        SELECT
+
+jp.jobpostId,
+	jp.department,
+	jp.recruitmentType,
+	jp.recruitingNumbers,
+	jp.jobTitle,
+	jp.registrar,
+	jp.registrationTime,
+	jp.expirationDate,
+	jp.jobDescription,
+	jp.Jobrequirement,
+	pro.positionCode,
+	pro.positionName,
+	pos.posiName,
+	dep.deptName
+	FROM
+	hrdb.jobposting jp
+	LEFT JOIN
+	hrdb.properties pro
+	ON jp.jobTitle=pro.poId
+	LEFT JOIN
+	hrdb.position pos
+	ON pos.posiId=pro.positionId
+	LEFT JOIN
+	hrdb.department dep
+	ON dep.deptId=jp.department
+    </select>
+</mapper>

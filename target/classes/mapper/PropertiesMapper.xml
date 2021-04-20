@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgc.sun.hr.mapper.PropertiesMapper">
+	<resultMap id="posiName" type="Properties">
+		<association property="positionId" javaType="Properties"></association>
+	</resultMap>
+    <select id="selectAll" resultType="Properties">
+        SELECT 	pr.poId,
+	pr.positionCode,
+	pr.positionName,
+	po.posiName,
+	pr.positionId,
+	pr.departmentId,
+	pr.positionDesc,
+	pr.remarks,
+	ENABLE
+
+	FROM
+	hrdb.properties
+	pr
+	LEFT JOIN
+	hrdb.position po
+	ON pr.positionId=po.posiId
+    </select>
+</mapper>
